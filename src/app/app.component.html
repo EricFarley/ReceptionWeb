@@ -1,0 +1,47 @@
+<div class="container" style="height: 100%">
+  <div class="row align-items-center justify-content-center" style="height: 100%">
+    <div class="col-sm-1 col-md-2 col-lg-3 col-xl-3"></div>
+    <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-6">
+      <div class="card">
+        <div class="card-header">Recepción reunión sacramental</div>
+        <div class="card-body p-4">
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <div class="form-floating" [ngClass]="{'mb-3': searchResult.length == 0}">
+              <input type="text" class="form-control mr-3" id="member" placeholder="Nombre y apellido"
+                formControlName="member" autocomplete="off">
+              <label for="member">Nombre y apellido</label>
+            </div>
+            <div class="list-group list-group-flush mb-3" style="overflow-y: auto; max-height: 15vh;"
+              *ngIf="searchResult.length > 0">
+              <button type="button" class="list-group-item list-group-item-action" (click)="onOptionSelected(option)"
+                *ngFor="let option of searchResult">
+                {{ option?.name }}
+              </button>
+            </div>
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="dni" placeholder="DNI" formControlName="dni"
+                autocomplete="off">
+              <label for="dni">DNI</label>
+            </div>
+
+            <div class="form-floating mb-3">
+              <input type="text" class="form-control" id="temperature" placeholder="Temperatura"
+                formControlName="temperature" autocomplete="off">
+              <label for="temperature">Temperatura</label>
+            </div>
+            <div class="pt-3">
+              <button [disabled]="!form.valid" type="submit" class="btn btn-outline-success">Enviar</button>
+            </div>
+          </form>
+          <div *ngIf="showSuccessAlert" class="alert alert-success mt-3" role="alert">
+            {{successMessage}}
+          </div>
+          <div *ngIf="showErrorAlert" class="alert alert-danger mt-3" role="alert">
+            {{errorMessage}} 
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-1 col-md-2 col-lg-3 col-xl-3"></div>
+  </div>
+</div>
