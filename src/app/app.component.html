@@ -2,7 +2,7 @@
   <div class="row align-items-center justify-content-center" style="height: 100%">
     <div class="col-sm-1 col-md-2 col-lg-3 col-xl-3"></div>
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-6">
-      <div class="card">
+      <div class="card border-dark">
         <div class="card-header">Recepción reunión sacramental</div>
         <div class="card-body p-4">
           <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -24,12 +24,16 @@
               <label for="dni">DNI</label>
             </div>
 
-            <div class="form-floating mb-3">
+            <div class="form-floating has-validation mb-3">
               <input type="text" class="form-control" id="temperature" placeholder="Temperatura"
-                formControlName="temperature" autocomplete="off">
+                formControlName="temperature" autocomplete="off" aria-describedby="lowTemperatureValidation" [ngClass]="{'is-invalid': showLowTemperatureAlert || showHighTemperatureAlert}">
               <label for="temperature">Temperatura</label>
+              <div id="lowTemperatureValidation" *ngIf="showLowTemperatureAlert || showHighTemperatureAlert" class="invalid-feedback">
+                {{showLowTemperatureAlert ? lowTemperatureErrorMessage : showHighTemperatureAlert ? highTemperatureErrorMessage : null}}
+              </div>
             </div>
             <div class="pt-3">
+              <button type="button" class="btn btn-outline-danger me-2" (click)="resetForm()">Borrar</button>
               <button [disabled]="!form.valid" type="submit" class="btn btn-outline-success">Enviar</button>
             </div>
           </form>

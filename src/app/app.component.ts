@@ -25,6 +25,14 @@ export class AppComponent implements OnInit {
   showErrorAlert: boolean = false;
   errorMessage: string = ALERT_MESSAGES.error;
 
+  showLowTemperatureAlert: boolean = false;
+  lowTemperatureErrorMessage: string = ALERT_MESSAGES.lowTemperature;
+
+  showHighTemperatureAlert: boolean = false;
+  highTemperatureErrorMessage: string = ALERT_MESSAGES.highTemperature;
+
+
+
   get member() { return this.form.get('member'); }
   get dni() { return this.form.get('dni'); }
   get temperature() { return this.form.get('temperature'); }
@@ -36,13 +44,14 @@ export class AppComponent implements OnInit {
     this.initForm();
     this.getData();
     this.onSearch();
+    this.onTemperatureChange();
   }
 
   initForm() {
     this.form = this.fb.group({
       member: ['', Validators.required],
       dni: ['', Validators.required],
-      temperature: ['', [Validators.required, Validators.pattern(/^\d+([.]\d)?$/)]]
+      temperature: ['', [Validators.required, Validators.pattern(/^\d+([.]\d)?$/), Validators.min(34), Validators.max(37.6)]]
     });
     this.form.disable();
   }
@@ -79,6 +88,23 @@ export class AppComponent implements OnInit {
     this.member.patchValue(option.name);
     this.dni.patchValue(option.dni)
     this.searchResult = [];
+  }
+
+  onTemperatureChange() {
+    this.temperature
+      .valueChanges
+      .subscribe(() => {
+        if (this.temperature.errors && this.temperature.errors.min) {
+          this.showLowTemperatureAlert = true;
+          this.showHighTemperatureAlert = false;
+        } else if (this.temperature.errors && this.temperature.errors.max) {
+          this.showHighTemperatureAlert = true;
+          this.showLowTemperatureAlert = false;
+        } else {
+          this.showLowTemperatureAlert = false;
+          this.showHighTemperatureAlert = false;
+        }
+      });
   }
 
   onSubmit() {
